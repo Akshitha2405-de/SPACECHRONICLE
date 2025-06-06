@@ -1,3 +1,4 @@
+
 # SpaceChronicle
 
 Welcome to **SpaceChronicle** — an innovative, interactive, and visually stunning web experience dedicated to space exploration and storytelling.
@@ -80,3 +81,6 @@ MIT
 ---
 
 For questions or feedback, please open an issue or contact the project maintainers.
+
+# SPACECHRONICLE
+d4773311ef4347e9e60f13aa646e1a5e2fabd8a3
