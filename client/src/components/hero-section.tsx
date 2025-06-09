@@ -14,6 +14,7 @@ const videoSources = [
 
 export default function HeroSection() {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [hasUserInteracted, setHasUserInteracted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -31,19 +32,26 @@ export default function HeroSection() {
     const videoElement = videoRef.current;
     if (videoElement) {
       videoElement.load(); // Ensure the new source loads
-      videoElement.play().catch(error => console.error("Error playing video:", error));
+      
+      // Only attempt to play if user has interacted
+      if (hasUserInteracted) {
+        videoElement.play().catch(error => console.error("Error playing video:", error));
+      }
     }
 
-    timerRef.current = setTimeout(() => {
-      handleVideoEnd();
-    }, VIDEO_PLAY_DURATION);
+    // Only start timer if user has interacted
+    if (hasUserInteracted) {
+      timerRef.current = setTimeout(() => {
+        handleVideoEnd();
+      }, VIDEO_PLAY_DURATION);
+    }
 
     return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
       }
     };
-  }, [currentVideoIndex]);
+  }, [currentVideoIndex, hasUserInteracted]);
 
   const scrollToTimeline = () => {
     const element = document.querySelector("#timeline");
@@ -53,6 +61,14 @@ export default function HeroSection() {
   };
 
   const beginJourney = () => {
+    // Set user interaction flag and start video playback
+    setHasUserInteracted(true);
+    
+    // Explicitly start video playback
+    if (videoRef.current) {
+      videoRef.current.play().catch(error => console.error("Error playing video:", error));
+    }
+    
     const element = document.querySelector("#timeline");
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
